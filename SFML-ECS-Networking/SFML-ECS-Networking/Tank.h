@@ -14,6 +14,8 @@ public:
 	Tank(std::string colour);
 
 	void Update(float dt);
+	std::string GetColour() const;
+	void SetColour(const std::string& colour);
 	const void Render(sf::RenderWindow &window);
 
 	sf::Vector2f position = {0.f, 0.f};

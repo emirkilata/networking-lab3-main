@@ -19,6 +19,15 @@ void Game::HandleEvents(const std::optional<sf::Event> event)
 {
 	// Handle key press events passed from window.
 	if (const auto* keyPressed = event->getIf<sf::Event::KeyPressed>()) {
+		if (keyPressed->scancode == sf::Keyboard::Scancode::R) {
+			tank.SetColour("red");
+		}
+		else if (keyPressed->scancode == sf::Keyboard::Scancode::B) {
+			tank.SetColour("blue");
+		}
+		else if (keyPressed->scancode == sf::Keyboard::Scancode::G) {
+			tank.SetColour("green");
+		}
 		if (keyPressed->scancode == sf::Keyboard::Scancode::W) {
 			tank.isMoving.forward = true;
 			tank.isMoving.backward = false;
@@ -56,13 +65,18 @@ void Game::Update(float dt)
 	tank.Update(dt);
 }
 
-void Game::NetworkUpdate(float dt, TankMessage data) {
-	// Force position update from network data.
+void Game::NetworkUpdate(float dt, TankMessage data)
+{
+	// Update tank position.
 	tank.position = { data.x, data.y };
-	// Update tank with new position.
-	// NOTE: This assumets no inputs were detected and so the tank will only move according to 
-	// network updates. This is not ideal and prone to unexpected behaviour if game is extended
-	// to be fully multiplayer. 
+
+	// Update tank rotation.
+	tank.bodyRotation = sf::degrees(data.rotation);
+
+	// Update tank colour.
+	tank.SetColour(data.colour);
+
+	// Apply updates to tank sprites.
 	tank.Update(dt);
 }
 
@@ -74,5 +88,10 @@ void Game::Render(sf::RenderWindow& window)
 
 TankMessage Game::GetNetworkUpdate()
 {
-	return { tank.position.x, tank.position.y };
+	return {
+		tank.position.x,
+		tank.position.y,
+		tank.bodyRotation.asDegrees(),
+		tank.GetColour()
+	};
 }

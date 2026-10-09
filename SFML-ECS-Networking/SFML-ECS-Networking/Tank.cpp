@@ -32,6 +32,28 @@ Tank::Tank(std::string colour)
 	barrel.setRotation(body.getRotation());
 }
 
+std::string Tank::GetColour() const
+{
+	return colorString;
+}
+
+void Tank::SetColour(const std::string& colour)
+{
+	if (colorString == colour)
+		return;
+
+	colorString = colour;
+
+	bodyTexture.loadFromFile("Assets/" + colour + "Tank.png");
+	barrelTexture.loadFromFile("Assets/" + colour + "Barrel.png");
+
+	body.setTexture(bodyTexture, true);
+	barrel.setTexture(barrelTexture, true);
+
+	body.setOrigin((sf::Vector2f)body.getTextureRect().getCenter());
+	barrel.setOrigin({ 6, 2 });
+}
+
 void Tank::Update(float dt)
 {
 	// Update rotation angle based on input.
