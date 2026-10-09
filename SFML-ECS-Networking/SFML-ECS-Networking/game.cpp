@@ -35,9 +35,7 @@ void Game::HandleEvents(const std::optional<sf::Event> event)
 			tank.isMoving.left = false;
 			tank.isMoving.right = true;
 		}
-		if (keyPressed->scancode == sf::Keyboard::Scancode::D) {
-
-		}
+		
 	}
 
 	// Handle key release events passed from window.
