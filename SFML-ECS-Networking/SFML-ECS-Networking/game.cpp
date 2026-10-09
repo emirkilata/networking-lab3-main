@@ -28,6 +28,14 @@ void Game::HandleEvents(const std::optional<sf::Event> event)
 		else if (keyPressed->scancode == sf::Keyboard::Scancode::G) {
 			tank.SetColour("green");
 		}
+		if (keyPressed->scancode == sf::Keyboard::Scancode::Q) {
+			tank.isBarrelRotating.left = true;
+			tank.isBarrelRotating.right = false;
+		}
+		else if (keyPressed->scancode == sf::Keyboard::Scancode::E) {
+			tank.isBarrelRotating.right = true;
+			tank.isBarrelRotating.left = false;
+		}
 		if (keyPressed->scancode == sf::Keyboard::Scancode::W) {
 			tank.isMoving.forward = true;
 			tank.isMoving.backward = false;
@@ -57,6 +65,10 @@ void Game::HandleEvents(const std::optional<sf::Event> event)
 			tank.isMoving.left = false;
 		if (keyReleased->scancode == sf::Keyboard::Scancode::D)
 			tank.isMoving.right = false;
+		if (keyReleased->scancode == sf::Keyboard::Scancode::Q)
+			tank.isBarrelRotating.left = false;
+		if (keyReleased->scancode == sf::Keyboard::Scancode::E)
+			tank.isBarrelRotating.right = false;
 	}
 }
 
@@ -67,16 +79,19 @@ void Game::Update(float dt)
 
 void Game::NetworkUpdate(float dt, TankMessage data)
 {
-	// Update tank position.
+	// Update position.
 	tank.position = { data.x, data.y };
 
-	// Update tank rotation.
+	// Update body rotation.
 	tank.bodyRotation = sf::degrees(data.rotation);
 
-	// Update tank colour.
+	// Update barrel rotation.
+	tank.barrelRotation = sf::degrees(data.barrelRotation);
+
+	// Update colour.
 	tank.SetColour(data.colour);
 
-	// Apply updates to tank sprites.
+	// Apply updates to sprites.
 	tank.Update(dt);
 }
 
@@ -92,6 +107,7 @@ TankMessage Game::GetNetworkUpdate()
 		tank.position.x,
 		tank.position.y,
 		tank.bodyRotation.asDegrees(),
+		tank.barrelRotation.asDegrees(),
 		tank.GetColour()
 	};
 }

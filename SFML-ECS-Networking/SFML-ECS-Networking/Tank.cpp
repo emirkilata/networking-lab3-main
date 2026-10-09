@@ -75,8 +75,24 @@ void Tank::Update(float dt)
 		position += body_direction * movementSpeed * dt;
 
 	// Apply new rotation to tank body and barrel.
+	// Rotate barrel independently using Q and E.
+	if (isBarrelRotating.left)
+		barrelRotation -= sf::degrees(barrelRotationSpeed * dt);
+	else if (isBarrelRotating.right)
+		barrelRotation += sf::degrees(barrelRotationSpeed * dt);
+
+	// Apply separate rotations.
 	body.setRotation(bodyRotation);
-	barrel.setRotation(bodyRotation);
+	barrel.setRotation(barrelRotation);
+	// Rotate barrel independently using Q and E.
+if (isBarrelRotating.left)
+    barrelRotation -= sf::degrees(barrelRotationSpeed * dt);
+else if (isBarrelRotating.right)
+    barrelRotation += sf::degrees(barrelRotationSpeed * dt);
+
+// Apply separate rotations.
+body.setRotation(bodyRotation);
+barrel.setRotation(barrelRotation);
 
 	// Apply new position to tank body and barrel.
 	body.setPosition(position);

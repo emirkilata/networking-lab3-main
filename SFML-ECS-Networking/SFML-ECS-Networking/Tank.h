@@ -29,6 +29,11 @@ public:
 		bool right = false;
 	} isMoving;
 
+	struct {
+		bool left = false;
+		bool right = false;
+	} isBarrelRotating;
+
 private:
 	// Temporary placeholder texture, make sue to replace before rendering the sprite.
 	sf::Texture placeholder = sf::Texture(sf::Vector2u(1, 1));
@@ -43,6 +48,7 @@ private:
 
 	float movementSpeed = 150.f;
 	float rotationSpeed = 200.f;
+	float barrelRotationSpeed = 150.f;
 
 	// Saving current colour here in case we need to send elsewhere.
 	std::string colorString = "";

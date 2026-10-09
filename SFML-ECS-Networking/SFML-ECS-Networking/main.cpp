@@ -103,7 +103,9 @@ int main() {
 				// Read recieved data into TankMessage struct.
 				// FIXME: reading from packet can fail. Refer to documentation on how to
 				// handle errors and add error checking here.
-				packet >> message.x >> message.y >> message.rotation >> message.colour;
+				packet >> message.x >> message.y
+					>> message.rotation >> message.barrelRotation
+					>> message.colour;
 				// Use the message data to update the game.
 				game.NetworkUpdate(dt, message);
 			}
@@ -116,7 +118,9 @@ int main() {
 			// Get data structure from game, containing update message.
 			TankMessage message = game.GetNetworkUpdate();
 			// Translate our messgage struct to sf::Packet (very rudimentary conversion)
-			packet << message.x << message.y << message.rotation << message.colour;
+			packet << message.x << message.y
+				<< message.rotation << message.barrelRotation
+				<< message.colour;
 			sf::IpAddress observerIp(127, 0, 0, 1);
 
 			// Send messages only as often as the send rate allows.
